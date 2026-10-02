@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="WebSupmit - điền thông tin, xem trước và tạo website tĩnh chuyên nghiệp sẵn sàng cho GitHub Pages.">
+  <meta name="color-scheme" content="light dark">
+  <title>WebSupmit — Website Generator</title>
+  <style>
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    :root{--bg:#eef2f7;--panel:#fff;--ink:#132033;--muted:#65758b;--line:#dce3ec;--brand:#0f67ff;--brand2:#00a2a2;--danger:#b42318;--radius:18px;--shadow:0 18px 50px rgba(24,39,75,.1)}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:12px}.mark{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:900;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 8px 22px rgba(15,103,255,.25)}
+    .brand h1{font-size:17px;margin:0}.brand p{font-size:12px;margin:2px 0 0;color:var(--muted)}.badge{font-size:11px;padding:6px 9px;border-radius:999px;background:#eaf2ff;color:#175cd3;font-weight:800;letter-spacing:.04em}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:9px 12px;font-weight:750;font-size:13px;transition:.2s}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(24,39,75,.08)}
+    .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.ghost{background:transparent}.btn.danger{color:var(--danger)}
+    .layout{display:grid;grid-template-columns:minmax(330px,430px) minmax(0,1fr);min-height:calc(100vh - 70px)}
+    .editor{padding:18px;border-right:1px solid var(--line);background:#f8fafc;overflow:auto;max-height:calc(100vh - 70px)}.preview-area{padding:18px;min-width:0}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 30px rgba(24,39,75,.05);margin-bottom:14px;overflow:hidden}.card-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.card-head h2{font-size:13px;margin:0;letter-spacing:.06em;text-transform:uppercase}.card-body{padding:15px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px;margin-bottom:10px}.field:last-child{margin-bottom:0}.field label{font-size:12px;font-weight:800;color:#344054}.field small{color:var(--muted);font-size:11px;line-height:1.4}
+    input,textarea,select{width:100%;border:1px solid #ccd5e1;border-radius:10px;background:#fff;color:var(--ink);padding:10px 11px;outline:none;transition:.15s}textarea{min-height:84px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#6ea1ff;box-shadow:0 0 0 3px rgba(15,103,255,.11)}
+    input[type="color"]{padding:3px;height:42px}.choice{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.choice button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 6px;font-size:12px;font-weight:800}.choice button.active{border-color:var(--brand);box-shadow:0 0 0 2px rgba(15,103,255,.12);color:#175cd3;background:#f5f9ff}
+    .checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;align-items:center;gap:7px;font-size:12px;color:#344054}.check input{width:auto}
+    .preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.preview-toolbar strong{font-size:13px}.devices{display:flex;gap:6px}.devices button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 9px;font-size:12px}.devices button.active{background:#101828;color:#fff;border-color:#101828}
+    .frame-wrap{background:#d9e0e9;border:1px solid #c8d0dc;border-radius:20px;padding:12px;min-height:calc(100vh - 132px);overflow:auto;display:flex;justify-content:center;align-items:flex-start}.frame{width:100%;transition:width .25s ease;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}.frame.tablet{width:820px}.frame.mobile{width:390px}
+    .status{font-size:11px;color:var(--muted);margin-top:8px;text-align:right}
+
+    /* Generated website preview */
+    .site-page{--accent:#0f67ff;--site-bg:#ffffff;--site-fg:#101828;--site-muted:#667085;--site-soft:#f6f8fb;--site-line:#e5e9f0;background:var(--site-bg);color:var(--site-fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
+    .site-page.font-editorial{font-family:Georgia,"Times New Roman",serif}.site-page.font-tech{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.site-page.theme-dark{--site-bg:#0b1020;--site-fg:#f5f7fb;--site-muted:#a8b0c0;--site-soft:#121a2d;--site-line:#24304a}
+    .site-shell{width:min(1120px,calc(100% - 40px));margin:auto}.site-nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--site-bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--site-line)}.site-nav .site-shell{display:flex;align-items:center;justify-content:space-between;min-height:70px;gap:16px}.site-logo{font-weight:900;letter-spacing:-.03em}.site-links{display:flex;gap:18px;flex-wrap:wrap}.site-links a,.site-socials a{color:var(--site-muted);text-decoration:none;font-size:13px;font-weight:700}.site-links a:hover,.site-socials a:hover{color:var(--accent)}
+    .site-hero{padding:88px 0 68px}.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:46px;align-items:center}.eyebrow{display:inline-flex;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);font-size:12px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.site-hero h1{font-size:clamp(42px,7vw,82px);line-height:.98;letter-spacing:-.06em;margin:20px 0}.site-hero p{font-size:18px;color:var(--site-muted);max-width:720px}.site-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.site-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:12px 18px;font-size:13px;font-weight:850;border:1px solid var(--site-line);color:var(--site-fg)}.site-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.site-btn:hover{transform:translateY(-1px)}
+    .portrait{aspect-ratio:1/1;border-radius:30px;overflow:hidden;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 18%,var(--site-soft)),var(--site-soft));border:1px solid var(--site-line);position:relative}.portrait img{width:100%;height:100%;object-fit:cover}.portrait .monogram{position:absolute;inset:0;display:grid;place-items:center;font-size:82px;font-weight:900;color:var(--accent)}
+    .site-section{padding:70px 0;border-top:1px solid var(--site-line)}.section-kicker{color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}.site-section h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.04em;line-height:1.05;margin:8px 0 14px}.lead{color:var(--site-muted);max-width:760px}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fact{padding:16px;border:1px solid var(--site-line);border-radius:16px;background:var(--site-soft)}.fact b{display:block;font-size:12px;color:var(--site-muted);margin-bottom:5px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.service,.project{border:1px solid var(--site-line);border-radius:20px;padding:22px;background:var(--site-soft);transition:.2s}.service:hover,.project:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 45%,var(--site-line))}.num{font-size:11px;color:var(--accent);font-weight:900}.service h3,.project h3{margin:14px 0 8px;font-size:19px}.service p,.project p{margin:0;color:var(--site-muted);font-size:14px}
+    .contact-box{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;padding:30px;border-radius:26px;background:var(--site-soft);border:1px solid var(--site-line)}.contact-list{display:grid;gap:9px}.contact-list a,.contact-list span{color:var(--site-muted);text-decoration:none;font-size:14px}.site-footer{padding:28px 0;border-top:1px solid var(--site-line);color:var(--site-muted);font-size:12px}.site-footer .site-shell{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.site-socials{display:flex;gap:12px}
+    .template-business .site-hero{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--site-bg)),var(--site-bg))}.template-landing .site-hero{text-align:center}.template-landing .hero-grid{grid-template-columns:1fr}.template-landing .portrait{display:none}.template-landing .site-hero p{margin-left:auto;margin-right:auto}.template-landing .site-cta{justify-content:center}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.editor{max-height:none;border-right:0;border-bottom:1px solid var(--line)}.hero-grid,.about-grid,.contact-box{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.portrait{max-width:420px}.frame-wrap{min-height:700px}}
+    @media(max-width:620px){.app-header{align-items:flex-start;flex-direction:column}.layout{min-height:0}.grid2,.checks{grid-template-columns:1fr}.choice{grid-template-columns:1fr}.preview-area{padding:10px}.frame-wrap{padding:6px}.site-links{display:none}.cards,.facts{grid-template-columns:1fr}.site-shell{width:min(100% - 28px,1120px)}.site-hero{padding:58px 0 44px}.site-section{padding:50px 0}}
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="mark">W</div>
+      <div><h1>WebSupmit</h1><p>Điền thông tin → xem trước → xuất website</p></div>
+      <span class="badge">GitHub Pages</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="btnImport">Nhập JSON</button>
+      <button class="btn" id="btnExport">Xuất JSON</button>
+      <button class="btn" id="btnCopy">Sao chép HTML</button>
+      <button class="btn primary" id="btnDownload">Tải index.html</button>
+      <input id="fileImport" type="file" accept="application/json,.json" hidden>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="editor">
+      <section class="card">
+        <div class="card-head"><h2>1. Loại website</h2></div>
+        <div class="card-body">
+          <div class="choice" id="typeChoice">
+            <button data-value="portfolio">Portfolio</button>
+            <button data-value="business">Doanh nghiệp</button>
+            <button data-value="landing">Landing</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>2. Thông tin cơ bản</h2></div>
+        <div class="card-body">
+          <div class="field"><label>Tên cá nhân / thương hiệu</label><input data-key="brandName" placeholder="Vietflex Lab"></div>
+          <div class="field"><label>Tiêu đề chính</label><input data-key="headline" placeholder="Biến ý tưởng thành sản phẩm số có thể sử dụng"></div>
+          <div class="field"><label>Mô tả ngắn</label><textarea data-key="subtitle" placeholder="Một câu giới thiệu rõ bạn là ai, làm gì và tạo ra giá trị gì."></textarea></div>
+          <div class="field"><label>Giới thiệu chi tiết</label><textarea data-key="about" placeholder="2–4 câu về năng lực, kinh nghiệm, định hướng hoặc doanh nghiệp."></textarea></div>
+          <div class="grid2">
+            <div class="field"><label>Email</label><input data-key="email" type="email" placeholder="hello@example.com"></div>
+            <div class="field"><label>Điện thoại</label><input data-key="phone" placeholder="+84 ..."></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Địa điểm</label><input data-key="location" placeholder="Việt Nam"></div>
+            <div class="field"><label>Ngôn ngữ</label><select data-key="language"><option value="vi">Tiếng Việt</option><option value="en">English</option></select></div>
+          </div>
+          <div class="field"><label>Ảnh đại diện / logo URL</label><input data-key="imageUrl" placeholder="https://.../photo.jpg"><small>Bỏ trống để dùng monogram tự động.</small></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>3. CTA & liên kết</h2></div>
+        <div class="card-body">
+          <div class="grid2">
+            <div class="field"><label>Nút CTA</label><input data-key="ctaText" placeholder="Liên hệ ngay"></div>
+            <div class="field"><label>CTA URL</label><input data-key="ctaUrl" placeholder="mailto:hello@example.com"></div>
+          </div>
+          <div class="field"><label>Website</label><input data-key="website" placeholder="https://example.com"></div>
+          <div class="grid2">
+            <div class="field"><label>GitHub</label><input data-key="github" placeholder="https://github.com/..."></div>
+            <div class="field"><label>LinkedIn</label><input data-key="linkedin" placeholder="https://linkedin.com/in/..."></div>
+          </div>
+          <div class="field"><label>Facebook / mạng xã hội</label><input data-key="facebook" placeholder="https://facebook.com/..."></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>4. Nội dung website</h2></div>
+        <div class="card-body">
+          <div class="field"><label>Dịch vụ / năng lực</label><textarea data-key="services" placeholder="WebGIS | Xây dựng nền tảng bản đồ web&#10;GeoAI | Tự động hóa và phân tích không gian&#10;Digital Twin | Mô hình số và dữ liệu thời gian thực"></textarea><small>Mỗi dòng: Tên | Mô tả</small></div>
+          <div class="field"><label>Dự án / sản phẩm</label><textarea data-key="projects" placeholder="Dự án A | Mô tả kết quả nổi bật&#10;Dự án B | Công nghệ và giá trị tạo ra"></textarea><small>Mỗi dòng: Tên | Mô tả</small></div>
+          <div class="checks">
+            <label class="check"><input type="checkbox" data-key="showAbout"> Giới thiệu</label>
+            <label class="check"><input type="checkbox" data-key="showServices"> Dịch vụ</label>
+            <label class="check"><input type="checkbox" data-key="showProjects"> Dự án</label>
+            <label class="check"><input type="checkbox" data-key="showContact"> Liên hệ</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>5. Giao diện & SEO</h2></div>
+        <div class="card-body">
+          <div class="grid2">
+            <div class="field"><label>Màu nhấn</label><input data-key="accent" type="color"></div>
+            <div class="field"><label>Chế độ</label><select data-key="theme"><option value="light">Sáng</option><option value="dark">Tối</option></select></div>
+          </div>
+          <div class="field"><label>Phong cách chữ</label><select data-key="fontStyle"><option value="modern">Modern</option><option value="editorial">Editorial</option><option value="tech">Tech</option></select></div>
+          <div class="field"><label>SEO Title</label><input data-key="seoTitle" placeholder="Tự lấy từ tên thương hiệu nếu bỏ trống"></div>
+          <div class="field"><label>SEO Description</label><textarea data-key="seoDescription" placeholder="Tự lấy từ mô tả ngắn nếu bỏ trống"></textarea></div>
+          <button class="btn danger" id="btnReset" type="button">Khôi phục dữ liệu mẫu</button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="preview-area">
+      <div class="preview-toolbar">
+        <strong>Preview thời gian thực</strong>
+        <div class="devices" id="devices">
+          <button class="active" data-device="desktop">Desktop</button>
+          <button data-device="tablet">Tablet</button>
+          <button data-device="mobile">Mobile</button>
+        </div>
+      </div>
+      <div class="frame-wrap">
+        <div class="frame" id="frame"><div id="siteCanvas"></div></div>
+      </div>
+      <div class="status" id="status">Tự động lưu trên trình duyệt.</div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      'use strict';
+      var STORAGE_KEY = 'websupmit-state-v1';
+      var sample = {
+        siteType:'portfolio',
+        brandName:'Vietflex Lab',
+        headline:'Biến dữ liệu, bản đồ và AI thành sản phẩm số có thể sử dụng',
+        subtitle:'Thiết kế các trải nghiệm số rõ ràng, tốc độ cao và sẵn sàng triển khai trên web — từ portfolio cá nhân đến website doanh nghiệp.',
+        about:'Chúng tôi kết hợp tư duy hệ thống, thiết kế giao diện và kỹ thuật web hiện đại để tạo ra những sản phẩm dễ hiểu ở bên ngoài nhưng vững chắc ở bên trong.',
+        email:'hello@example.com',
+        phone:'+84 900 000 000',
+        location:'Việt Nam',
+        language:'vi',
+        imageUrl:'',
+        ctaText:'Bắt đầu trao đổi',
+        ctaUrl:'mailto:hello@example.com',
+        website:'',
+        github:'https://github.com/',
+        linkedin:'',
+        facebook:'',
+        services:'Website chuyên nghiệp | Responsive, SEO-ready và tối ưu trải nghiệm người dùng\\nWebGIS & dữ liệu | Trực quan hóa dữ liệu không gian và bản đồ tương tác\\nAI & tự động hóa | Tích hợp workflow thông minh vào sản phẩm số',
+        projects:'Nền tảng bản đồ | Website bản đồ tương tác, dữ liệu đa lớp và trải nghiệm nhanh\\nDigital Workspace | Trang giới thiệu dịch vụ, dự án và năng lực theo cấu trúc chuyên nghiệp\\nOpen-source Tool | Công cụ chạy trực tiếp trên GitHub Pages, không phụ thuộc backend',
+        showAbout:true,showServices:true,showProjects:true,showContact:true,
+        accent:'#0f67ff',theme:'light',fontStyle:'modern',seoTitle:'',seoDescription:''
+      };
+      var state = loadState();
+      var canvas = document.getElementById('siteCanvas');
+      var frame = document.getElementById('frame');
+      var status = document.getElementById('status');
+
+      function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+      function loadState(){
+        try{
+          var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+          return Object.assign(clone(sample), saved || {});
+        }catch(e){ return clone(sample); }
+      }
+      function saveState(){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        status.textContent = 'Đã lưu cấu hình lúc ' + new Date().toLocaleTimeString();
+      }
+      function esc(value){
+        return String(value == null ? '' : value).replace(/[&<>"']/g,function(ch){
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch];
+        });
+      }
+      function safeUrl(value){
+        var v = String(value || '').trim();
+        if(!v) return '';
+        if(v.charAt(0)==='#' || v.charAt(0)==='/' || /^https?:\\/\\//i.test(v) || /^mailto:/i.test(v) || /^tel:/i.test(v)) return v;
+        return '';
+      }
+      function parseRows(text){
+        return String(text || '').split(/\\r?\\n/).map(function(line){
+          var p=line.split('|'); return {title:(p.shift()||'').trim(),desc:p.join('|').trim()};
+        }).filter(function(x){return x.title;}).slice(0,9);
+      }
+      function labels(){
+        if(state.language==='en') return {about:'About',services:'Services',projects:'Projects',contact:'Contact',home:'Home',location:'Location',email:'Email',phone:'Phone',website:'Website',made:'Generated with WebSupmit',kicker:'Profile'};
+        return {about:'Giới thiệu',services:'Dịch vụ',projects:'Dự án',contact:'Liên hệ',home:'Trang chủ',location:'Địa điểm',email:'Email',phone:'Điện thoại',website:'Website',made:'Tạo bằng WebSupmit',kicker:'Hồ sơ'};
+      }
+      function initials(){
+        return (state.brandName || 'W').split(/\\s+/).filter(Boolean).slice(0,2).map(function(s){return s.charAt(0).toUpperCase();}).join('');
+      }
+      function socialLinks(){
+        var links=[];
+        if(safeUrl(state.github)) links.push('<a href="'+esc(safeUrl(state.github))+'" target="_blank" rel="noopener">GitHub</a>');
+        if(safeUrl(state.linkedin)) links.push('<a href="'+esc(safeUrl(state.linkedin))+'" target="_blank" rel="noopener">LinkedIn</a>');
+        if(safeUrl(state.facebook)) links.push('<a href="'+esc(safeUrl(state.facebook))+'" target="_blank" rel="noopener">Social</a>');
+        return links.join('');
+      }
+      function navMarkup(L){
+        var items=['<a href="#home">'+esc(L.home)+'</a>'];
+        if(state.showAbout) items.push('<a href="#about">'+esc(L.about)+'</a>');
+        if(state.showServices) items.push('<a href="#services">'+esc(L.services)+'</a>');
+        if(state.showProjects) items.push('<a href="#projects">'+esc(L.projects)+'</a>');
+        if(state.showContact) items.push('<a href="#contact">'+esc(L.contact)+'</a>');
+        return items.join('');
+      }
+      function cardsMarkup(rows,kind){
+        return rows.map(function(x,i){
+          return '<article class="'+kind+'"><div class="num">0'+(i+1)+'</div><h3>'+esc(x.title)+'</h3><p>'+esc(x.desc || '—')+'</p></article>';
+        }).join('');
+      }
+      function buildSiteMarkup(){
+        var L=labels(), services=parseRows(state.services), projects=parseRows(state.projects);
+        var typeLabel=state.siteType==='business'?(state.language==='en'?'Business':'Doanh nghiệp'):state.siteType==='landing'?'Landing Page':(state.language==='en'?'Portfolio':'Portfolio');
+        var image=safeUrl(state.imageUrl);
+        var portrait=image?'<div class="portrait"><img src="'+esc(image)+'" alt="'+esc(state.brandName)+'"></div>':'<div class="portrait"><div class="monogram">'+esc(initials())+'</div></div>';
+        var facts='<div class="facts">'+
+          (state.location?'<div class="fact"><b>'+esc(L.location)+'</b>'+esc(state.location)+'</div>':'')+
+          (state.email?'<div class="fact"><b>'+esc(L.email)+'</b>'+esc(state.email)+'</div>':'')+
+          (state.phone?'<div class="fact"><b>'+esc(L.phone)+'</b>'+esc(state.phone)+'</div>':'')+
+          (safeUrl(state.website)?'<div class="fact"><b>'+esc(L.website)+'</b>'+esc(state.website)+'</div>':'')+
+          '</div>';
+        var html='';
+        html+='<div class="site-page template-'+esc(state.siteType)+' theme-'+esc(state.theme)+' font-'+esc(state.fontStyle)+'" style="--accent:'+esc(state.accent)+'">';
+        html+='<nav class="site-nav"><div class="site-shell"><div class="site-logo">'+esc(state.brandName)+'</div><div class="site-links">'+navMarkup(L)+'</div></div></nav>';
+        html+='<header class="site-hero" id="home"><div class="site-shell hero-grid"><div><span class="eyebrow">'+esc(typeLabel)+'</span><h1>'+esc(state.headline)+'</h1><p>'+esc(state.subtitle)+'</p><div class="site-cta">';
+        if(state.ctaText && safeUrl(state.ctaUrl)) html+='<a class="site-btn primary" href="'+esc(safeUrl(state.ctaUrl))+'">'+esc(state.ctaText)+'</a>';
+        if(state.showProjects) html+='<a class="site-btn" href="#projects">'+esc(L.projects)+'</a>';
+        html+='</div></div>'+portrait+'</div></header>';
+        if(state.showAbout) html+='<section class="site-section" id="about"><div class="site-shell about-grid"><div><div class="section-kicker">'+esc(L.kicker)+'</div><h2>'+esc(L.about)+'</h2><p class="lead">'+esc(state.about)+'</p></div>'+facts+'</div></section>';
+        if(state.showServices) html+='<section class="site-section" id="services"><div class="site-shell"><div class="section-kicker">'+esc(L.services)+'</div><h2>'+esc(state.language==='en'?'What I can deliver':'Năng lực có thể triển khai')+'</h2><div class="cards">'+cardsMarkup(services,'service')+'</div></div></section>';
+        if(state.showProjects) html+='<section class="site-section" id="projects"><div class="site-shell"><div class="section-kicker">'+esc(L.projects)+'</div><h2>'+esc(state.language==='en'?'Selected work':'Một số dự án tiêu biểu')+'</h2><div class="cards">'+cardsMarkup(projects,'project')+'</div></div></section>';
+        if(state.showContact) {
+          html+='<section class="site-section" id="contact"><div class="site-shell"><div class="contact-box"><div><div class="section-kicker">'+esc(L.contact)+'</div><h2>'+esc(state.language==='en'?'Let’s build something useful.':'Cùng xây một sản phẩm hữu ích.')+'</h2><p class="lead">'+esc(state.subtitle)+'</p></div><div class="contact-list">';
+          if(state.email) html+='<a href="mailto:'+esc(state.email)+'">'+esc(state.email)+'</a>';
+          if(state.phone) html+='<a href="tel:'+esc(state.phone.replace(/\\s+/g,''))+'">'+esc(state.phone)+'</a>';
+          if(state.location) html+='<span>'+esc(state.location)+'</span>';
+          if(safeUrl(state.website)) html+='<a href="'+esc(safeUrl(state.website))+'" target="_blank" rel="noopener">'+esc(state.website)+'</a>';
+          html+='</div></div></div></section>';
+        }
+        html+='<footer class="site-footer"><div class="site-shell"><span>© '+new Date().getFullYear()+' '+esc(state.brandName)+'. '+esc(L.made)+'.</span><div class="site-socials">'+socialLinks()+'</div></div></footer></div>';
+        return html;
+      }
+      function generatedStyles(){
+        return [
+          '*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}',
+          '.site-page{--accent:#0f67ff;--site-bg:#fff;--site-fg:#101828;--site-muted:#667085;--site-soft:#f6f8fb;--site-line:#e5e9f0;background:var(--site-bg);color:var(--site-fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;min-height:100vh}',
+          '.site-page.font-editorial{font-family:Georgia,"Times New Roman",serif}.site-page.font-tech{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.site-page.theme-dark{--site-bg:#0b1020;--site-fg:#f5f7fb;--site-muted:#a8b0c0;--site-soft:#121a2d;--site-line:#24304a}',
+          '.site-shell{width:min(1120px,calc(100% - 40px));margin:auto}.site-nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--site-bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--site-line)}.site-nav .site-shell{display:flex;align-items:center;justify-content:space-between;min-height:70px;gap:16px}.site-logo{font-weight:900;letter-spacing:-.03em}.site-links{display:flex;gap:18px;flex-wrap:wrap}.site-links a,.site-socials a{color:var(--site-muted);text-decoration:none;font-size:13px;font-weight:700}.site-links a:hover,.site-socials a:hover{color:var(--accent)}',
+          '.site-hero{padding:88px 0 68px}.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:46px;align-items:center}.eyebrow{display:inline-flex;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);font-size:12px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.site-hero h1{font-size:clamp(42px,7vw,82px);line-height:.98;letter-spacing:-.06em;margin:20px 0}.site-hero p{font-size:18px;color:var(--site-muted);max-width:720px}.site-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.site-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:12px 18px;font-size:13px;font-weight:850;border:1px solid var(--site-line);color:var(--site-fg);transition:.2s}.site-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.site-btn:hover{transform:translateY(-1px)}',
+          '.portrait{aspect-ratio:1/1;border-radius:30px;overflow:hidden;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 18%,var(--site-soft)),var(--site-soft));border:1px solid var(--site-line);position:relative}.portrait img{width:100%;height:100%;object-fit:cover}.portrait .monogram{position:absolute;inset:0;display:grid;place-items:center;font-size:82px;font-weight:900;color:var(--accent)}',
+          '.site-section{padding:70px 0;border-top:1px solid var(--site-line)}.section-kicker{color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}.site-section h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.04em;line-height:1.05;margin:8px 0 14px}.lead{color:var(--site-muted);max-width:760px}.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fact{padding:16px;border:1px solid var(--site-line);border-radius:16px;background:var(--site-soft)}.fact b{display:block;font-size:12px;color:var(--site-muted);margin-bottom:5px}',
+          '.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.service,.project{border:1px solid var(--site-line);border-radius:20px;padding:22px;background:var(--site-soft);transition:.2s}.service:hover,.project:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 45%,var(--site-line))}.num{font-size:11px;color:var(--accent);font-weight:900}.service h3,.project h3{margin:14px 0 8px;font-size:19px}.service p,.project p{margin:0;color:var(--site-muted);font-size:14px}',
+          '.contact-box{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;padding:30px;border-radius:26px;background:var(--site-soft);border:1px solid var(--site-line)}.contact-list{display:grid;gap:9px}.contact-list a,.contact-list span{color:var(--site-muted);text-decoration:none;font-size:14px}.site-footer{padding:28px 0;border-top:1px solid var(--site-line);color:var(--site-muted);font-size:12px}.site-footer .site-shell{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.site-socials{display:flex;gap:12px}',
+          '.template-business .site-hero{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--site-bg)),var(--site-bg))}.template-landing .site-hero{text-align:center}.template-landing .hero-grid{grid-template-columns:1fr}.template-landing .portrait{display:none}.template-landing .site-hero p{margin-left:auto;margin-right:auto}.template-landing .site-cta{justify-content:center}',
+          '@media(max-width:760px){.site-links{display:none}.hero-grid,.about-grid,.contact-box{grid-template-columns:1fr}.cards,.facts{grid-template-columns:1fr}.portrait{max-width:420px}.site-shell{width:min(100% - 28px,1120px)}.site-hero{padding:58px 0 44px}.site-section{padding:50px 0}}',
+          '@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}'
+        ].join('');
+      }
+      function fullDocument(){
+        var title=state.seoTitle || state.brandName || 'Website';
+        var desc=state.seoDescription || state.subtitle || '';
+        return '<!doctype html><html lang="'+esc(state.language)+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="'+esc(desc)+'"><meta name="theme-color" content="'+esc(state.accent)+'"><title>'+esc(title)+'</title><style>'+generatedStyles()+'</style></head><body>'+buildSiteMarkup()+'</body></html>';
+      }
+      function render(){
+        canvas.innerHTML=buildSiteMarkup();
+        syncForm();
+        document.querySelectorAll('#typeChoice button').forEach(function(btn){btn.classList.toggle('active',btn.dataset.value===state.siteType);});
+      }
+      function syncForm(){
+        document.querySelectorAll('[data-key]').forEach(function(el){
+          var key=el.dataset.key;
+          if(el.type==='checkbox') el.checked=!!state[key];
+          else if(document.activeElement!==el) el.value=state[key] == null ? '' : state[key];
+        });
+      }
+      function updateFromInput(el){
+        var key=el.dataset.key;
+        state[key]=el.type==='checkbox'?el.checked:el.value;
+        render(); saveState();
+      }
+      document.querySelectorAll('[data-key]').forEach(function(el){
+        el.addEventListener(el.type==='color'?'input':'change',function(){updateFromInput(el);});
+        if(el.tagName==='INPUT' || el.tagName==='TEXTAREA') el.addEventListener('input',function(){updateFromInput(el);});
+      });
+      document.getElementById('typeChoice').addEventListener('click',function(e){
+        var btn=e.target.closest('button[data-value]'); if(!btn)return; state.siteType=btn.dataset.value; render(); saveState();
+      });
+      document.getElementById('devices').addEventListener('click',function(e){
+        var btn=e.target.closest('button[data-device]');if(!btn)return;
+        document.querySelectorAll('#devices button').forEach(function(x){x.classList.remove('active');});btn.classList.add('active');
+        frame.className='frame'+(btn.dataset.device==='desktop'?'':' '+btn.dataset.device);
+      });
+      function download(name,text,type){
+        var blob=new Blob([text],{type:type||'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+        a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},500);
+      }
+      document.getElementById('btnDownload').addEventListener('click',function(){download('index.html',fullDocument(),'text/html;charset=utf-8');status.textContent='Đã tạo index.html độc lập, sẵn sàng đưa lên GitHub Pages.';});
+      document.getElementById('btnExport').addEventListener('click',function(){download('websupmit.config.json',JSON.stringify(state,null,2),'application/json');});
+      document.getElementById('btnCopy').addEventListener('click',function(){
+        var html=fullDocument();
+        if(navigator.clipboard && navigator.clipboard.writeText){navigator.clipboard.writeText(html).then(function(){status.textContent='Đã sao chép HTML.';});}
+        else{var ta=document.createElement('textarea');ta.value=html;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();status.textContent='Đã sao chép HTML.';}
+      });
+      document.getElementById('btnImport').addEventListener('click',function(){document.getElementById('fileImport').click();});
+      document.getElementById('fileImport').addEventListener('change',function(e){
+        var file=e.target.files && e.target.files[0]; if(!file)return;
+        var reader=new FileReader();
+        reader.onload=function(){try{var obj=JSON.parse(reader.result);state=Object.assign(clone(sample),obj||{});render();saveState();status.textContent='Đã nhập cấu hình JSON.';}catch(err){status.textContent='JSON không hợp lệ.';}};
+        reader.readAsText(file);e.target.value='';
+      });
+      document.getElementById('btnReset').addEventListener('click',function(){state=clone(sample);render();saveState();status.textContent='Đã khôi phục dữ liệu mẫu.';});
+      render();
+    })();
+  </script>
+</body>
+</html>
