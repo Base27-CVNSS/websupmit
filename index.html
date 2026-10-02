@@ -200,11 +200,11 @@
       function safeUrl(value){
         var v = String(value || '').trim();
         if(!v) return '';
-        if(v.charAt(0)==='#' || v.charAt(0)==='/' || /^https?:\\/\\//i.test(v) || /^mailto:/i.test(v) || /^tel:/i.test(v)) return v;
+        if(v.charAt(0)==='#' || v.charAt(0)==='/' || /^https?:\/\//i.test(v) || /^mailto:/i.test(v) || /^tel:/i.test(v)) return v;
         return '';
       }
       function parseRows(text){
-        return String(text || '').split(/\\r?\\n/).map(function(line){
+        return String(text || '').split(/\r?\n/).map(function(line){
           var p=line.split('|'); return {title:(p.shift()||'').trim(),desc:p.join('|').trim()};
         }).filter(function(x){return x.title;}).slice(0,9);
       }
@@ -213,7 +213,7 @@
         return {about:'Giới thiệu',services:'Dịch vụ',projects:'Dự án',contact:'Liên hệ',home:'Trang chủ',location:'Địa điểm',email:'Email',phone:'Điện thoại',website:'Website',made:'Tạo bằng WebSupmit',kicker:'Hồ sơ'};
       }
       function initials(){
-        return (state.brandName || 'W').split(/\\s+/).filter(Boolean).slice(0,2).map(function(s){return s.charAt(0).toUpperCase();}).join('');
+        return (state.brandName || 'W').split(/\s+/).filter(Boolean).slice(0,2).map(function(s){return s.charAt(0).toUpperCase();}).join('');
       }
       function socialLinks(){
         var links=[];
@@ -259,7 +259,7 @@
         if(state.showContact) {
           html+='<section class="site-section" id="contact"><div class="site-shell"><div class="contact-box"><div><div class="section-kicker">'+esc(L.contact)+'</div><h2>'+esc(state.language==='en'?'Let’s build something useful.':'Cùng xây một sản phẩm hữu ích.')+'</h2><p class="lead">'+esc(state.subtitle)+'</p></div><div class="contact-list">';
           if(state.email) html+='<a href="mailto:'+esc(state.email)+'">'+esc(state.email)+'</a>';
-          if(state.phone) html+='<a href="tel:'+esc(state.phone.replace(/\\s+/g,''))+'">'+esc(state.phone)+'</a>';
+          if(state.phone) html+='<a href="tel:'+esc(state.phone.replace(/\s+/g,''))+'">'+esc(state.phone)+'</a>';
           if(state.location) html+='<span>'+esc(state.location)+'</span>';
           if(safeUrl(state.website)) html+='<a href="'+esc(safeUrl(state.website))+'" target="_blank" rel="noopener">'+esc(state.website)+'</a>';
           html+='</div></div></div></section>';
